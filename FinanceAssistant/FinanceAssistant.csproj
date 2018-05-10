@@ -20,6 +20,15 @@
     <Content Remove="ClientApp\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Migrations\20180510170545_InitialModel.cs" />
+    <Compile Remove="Migrations\20180510170545_InitialModel.Designer.cs" />
+    <Compile Remove="Migrations\20180510171259_InitialModel.cs" />
+    <Compile Remove="Migrations\20180510171259_InitialModel.Designer.cs" />
+    <Compile Remove="Migrations\20180510173923_InitialModel.cs" />
+    <Compile Remove="Migrations\20180510173923_InitialModel.Designer.cs" />
+  </ItemGroup>
+
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">
     <!-- Ensure Node.js is installed -->
     <Exec Command="node --version" ContinueOnError="true">
