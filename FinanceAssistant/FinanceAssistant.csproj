@@ -8,6 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="6.2.2" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.1" />
   </ItemGroup>
@@ -28,6 +30,8 @@
     <Compile Remove="Migrations\20180510171259_InitialModel.Designer.cs" />
     <Compile Remove="Migrations\20180510173923_InitialModel.cs" />
     <Compile Remove="Migrations\20180510173923_InitialModel.Designer.cs" />
+    <Compile Remove="Migrations\20180512091213_SeedTransactionCategoryTable.cs" />
+    <Compile Remove="Migrations\20180512091213_SeedTransactionCategoryTable.Designer.cs" />
   </ItemGroup>
 
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">
