@@ -20,7 +20,10 @@
 
   <ItemGroup>
     <!-- Files not to publish (note that the 'dist' subfolders are re-added below) -->
+    <Compile Remove="ClientApp\app\services\**" />
     <Content Remove="ClientApp\**" />
+    <EmbeddedResource Remove="ClientApp\app\services\**" />
+    <None Remove="ClientApp\app\services\**" />
   </ItemGroup>
 
   <ItemGroup>
