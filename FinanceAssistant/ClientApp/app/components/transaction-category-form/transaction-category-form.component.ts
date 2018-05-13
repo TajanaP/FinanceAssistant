@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TransactionTypeService } from '../../services/transaction-type.service';
 
 @Component({
   selector: 'app-transaction-category-form',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TransactionCategoryFormComponent implements OnInit {
 
-  constructor() { }
+    transactionTypes: any[];
 
-  ngOnInit() {
-  }
+    constructor(private transactionTypeService: TransactionTypeService) { }
 
+    ngOnInit() {
+        this.transactionTypeService.getCategoryTypes().subscribe(types =>
+            this.transactionTypes = types);
+    }
 }

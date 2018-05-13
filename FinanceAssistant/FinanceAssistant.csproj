@@ -20,10 +20,7 @@
 
   <ItemGroup>
     <!-- Files not to publish (note that the 'dist' subfolders are re-added below) -->
-    <Compile Remove="ClientApp\app\services\**" />
     <Content Remove="ClientApp\**" />
-    <EmbeddedResource Remove="ClientApp\app\services\**" />
-    <None Remove="ClientApp\app\services\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,6 +32,10 @@
     <Compile Remove="Migrations\20180510173923_InitialModel.Designer.cs" />
     <Compile Remove="Migrations\20180512091213_SeedTransactionCategoryTable.cs" />
     <Compile Remove="Migrations\20180512091213_SeedTransactionCategoryTable.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ClientApp\app\services\" />
   </ItemGroup>
 
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">
