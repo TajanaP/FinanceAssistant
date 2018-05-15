@@ -16,6 +16,9 @@ namespace FinanceAssistant.Mapping
             CreateMap<Transaction, TransactionViewModel>();
             CreateMap<TransactionType, TransactionTypeViewModel>();
             CreateMap<TransactionCategory, TransactionCategoryViewModel>();
+
+            // ViewModel To Domain
+            CreateMap<TransactionCategoryViewModel, TransactionCategory>();
         }
     }
 }
