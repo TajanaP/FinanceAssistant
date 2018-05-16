@@ -9,6 +9,7 @@ import { TransactionTypeService } from '../../services/transaction-type.service'
 export class TransactionCategoryFormComponent implements OnInit {
 
     transactionTypes: any[];
+    transactionCategory = {}; // initialy set to blank object
 
     constructor(private transactionTypeService: TransactionTypeService) { }
 
