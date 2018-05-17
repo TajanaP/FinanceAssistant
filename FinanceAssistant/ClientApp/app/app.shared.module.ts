@@ -11,6 +11,7 @@ import { FetchDataComponent } from './components/fetchdata/fetchdata.component';
 import { CounterComponent } from './components/counter/counter.component';
 import { TransactionCategoryFormComponent } from './components/transaction-category-form/transaction-category-form.component';
 import { TransactionTypeService } from './services/transaction-type.service';
+import { TransactionCategoryService } from './services/transaction-category.service';
 
 @NgModule({
     declarations: [
@@ -29,11 +30,13 @@ import { TransactionTypeService } from './services/transaction-type.service';
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
             { path: 'transactionCategory/new', component: TransactionCategoryFormComponent },
+            { path: 'transactionCategory/:id', component: TransactionCategoryFormComponent },
             { path: '**', redirectTo: 'home' }
         ])
     ],
     providers: [
-        TransactionTypeService
+        TransactionTypeService,
+        TransactionCategoryService
     ]
 })
 export class AppModuleShared {
