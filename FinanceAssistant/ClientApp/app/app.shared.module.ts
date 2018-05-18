@@ -12,6 +12,7 @@ import { CounterComponent } from './components/counter/counter.component';
 import { TransactionCategoryFormComponent } from './components/transaction-category-form/transaction-category-form.component';
 import { TransactionTypeService } from './services/transaction-type.service';
 import { TransactionCategoryService } from './services/transaction-category.service';
+import { TransactionCategoryListComponent } from './components/transaction-category-list/transaction-category-list.component';
 
 @NgModule({
     declarations: [
@@ -20,7 +21,8 @@ import { TransactionCategoryService } from './services/transaction-category.serv
         CounterComponent,
         FetchDataComponent,
         HomeComponent,
-        TransactionCategoryFormComponent
+        TransactionCategoryFormComponent,
+        TransactionCategoryListComponent
     ],
     imports: [
         CommonModule,
@@ -29,6 +31,7 @@ import { TransactionCategoryService } from './services/transaction-category.serv
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
+            { path: 'transactionCategories', component: TransactionCategoryListComponent },
             { path: 'transactionCategory/new', component: TransactionCategoryFormComponent },
             { path: 'transactionCategory/:id', component: TransactionCategoryFormComponent },
             { path: '**', redirectTo: 'home' }

@@ -14,11 +14,13 @@ namespace FinanceAssistant.Controllers
     public class TransactionCategoryController : Controller
     {
         private readonly ITransactionCategoryRepository categoryRepository;
+        private readonly ITransactionTypeRepository typeRepository;
         private readonly IMapper mapper;
 
-        public TransactionCategoryController(ITransactionCategoryRepository categoryRepository, IMapper mapper)
+        public TransactionCategoryController(ITransactionCategoryRepository categoryRepository, ITransactionTypeRepository typeRepository, IMapper mapper)
         {
             this.categoryRepository = categoryRepository;
+            this.typeRepository = typeRepository;
             this.mapper = mapper;
         }
 
@@ -36,6 +38,16 @@ namespace FinanceAssistant.Controllers
 
             var categoryViewModel = mapper.Map<TransactionCategory, TransactionCategoryViewModel>(categoryInDb);
             return Ok(categoryViewModel);
+        }
+
+        [HttpGet]
+        public IEnumerable<TransactionCategoryViewModel> getCategories()
+        {
+            var categoriesInDb = categoryRepository.GetAllFromDatabaseEnumerable().ToList();
+            foreach (var category in categoriesInDb)
+                category.Type = typeRepository.FindById(category.TypeId);
+
+            return mapper.Map<IEnumerable<TransactionCategory>, IEnumerable<TransactionCategoryViewModel>>(categoriesInDb);
         }
 
         [HttpPost]

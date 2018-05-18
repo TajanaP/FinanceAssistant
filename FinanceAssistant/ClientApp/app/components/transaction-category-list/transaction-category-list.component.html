@@ -1,0 +1,24 @@
+<h2>Categories</h2>
+<p>
+    <a [routerLink]="['/transactionCategory/new']" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i></a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Type</th>
+            <th>Name</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let category of categories">
+            <td>{{ category.id }}</td>
+            <td>{{ category.type.name }}</td>
+            <td>{{ category.name }}</td>
+            <td>
+                <a [routerLink]="['/transactionCategory/', category.id]" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i></a>
+            </td>
+        </tr>
+    </tbody>
+</table>
