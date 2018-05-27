@@ -2,6 +2,18 @@
 <p>
     <a [routerLink]="['/transactionCategory/new']" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i></a>
 </p>
+
+<div class="well">
+    <div class="form-group">
+        <label for="type">Type</label>
+        <select id="type" class="form-control" [(ngModel)]="filter.typeId" (change)="onFilterChange()">
+            <option value="" disabled>-- Select Transaction Type --</option>
+            <option *ngFor="let type of types" value="{{ type.id }}">{{ type.name }}</option>
+        </select>
+    </div>
+    <button class="btn btn-primary" (click)="resetFilter()">Reset</button>
+</div>
+
 <table class="table">
     <thead>
         <tr>
