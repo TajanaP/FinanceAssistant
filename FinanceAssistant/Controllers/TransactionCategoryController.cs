@@ -41,7 +41,7 @@ namespace FinanceAssistant.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<TransactionCategoryViewModel> getCategories()
+        public IEnumerable<TransactionCategoryViewModel> GetCategories()
         {
             var categoriesInDb = categoryRepository.GetAllFromDatabaseEnumerable().ToList();
             foreach (var category in categoriesInDb)
