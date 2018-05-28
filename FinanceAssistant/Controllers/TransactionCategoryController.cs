@@ -50,6 +50,13 @@ namespace FinanceAssistant.Controllers
             return mapper.Map<IEnumerable<TransactionCategory>, IEnumerable<TransactionCategoryViewModel>>(categoriesInDb);
         }
 
+        [HttpGet("getCategoriesForType/{id}")]
+        public IEnumerable<TransactionCategoryViewModel> GetCategoriesforType(int id)
+        {
+            var categoriesInDb = categoryRepository.GetAllFromDatabaseEnumerable().Where(c => c.TypeId == id).ToList();
+            return mapper.Map<IEnumerable<TransactionCategory>, IEnumerable<TransactionCategoryViewModel>>(categoriesInDb);
+        }
+
         [HttpPost]
         public IActionResult Create([FromBody]TransactionCategoryViewModel categoryViewModel)
         {

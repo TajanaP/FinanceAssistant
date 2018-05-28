@@ -1,0 +1,45 @@
+<h2>New Transaction</h2>
+<hr />
+<form (ngSubmit)="submit()" #form="ngForm">
+    <div class="form-group">
+        <label for="type">Type</label>
+        <select id="type" class="form-control" (change)="onTypeChange()" [(ngModel)]="transaction.typeId" name="categoryTypeId" required #typeId="ngModel">
+            <option value="" disabled>-- Select Transaction Type --</option>
+            <option *ngFor="let type of transactionTypes" value="{{ type.id }}">{{ type.name }}</option>
+        </select>
+        <div class="alert alert-danger" *ngIf="typeId.touched && !typeId.valid">Please select category type!</div>
+    </div>
+    <div class="form-group">
+        <label for="category">Category</label>
+        <select id="category" class="form-control" [(ngModel)]="transaction.categoryId" name="categoryId" required #categoryId="ngModel">
+            <option value="" disabled>-- Select Transaction Category --</option>
+            <option *ngFor="let category of transactionCategories" value="{{ category.id }}">{{ category.name }}</option>
+        </select>
+        <div class="alert alert-danger" *ngIf="categoryId.touched && !categoryId.valid">Please select category!</div>
+    </div>
+    <div class="form-group">
+        <label for="description">Description</label>
+        <input type="text" id="description" class="form-control" [(ngModel)]="transaction.description" name="description" />
+    </div>
+    <div class="form-group">
+        <label for="amount">Amount</label>
+        <input type="text" id="amount" class="form-control" [(ngModel)]="transaction.amount" name="amount" required #amount="ngModel" />
+        <div class="alert alert-danger" *ngIf="amount.touched && !amount.valid">Please provide the amount!</div>
+    </div>
+    <div class="form-group">
+        <label for="currency">Currency</label>
+        <select id="currency" class="form-control" [(ngModel)]="transaction.currency" name="currency" required #currency="ngModel">
+            <option value="" disabled>-- Select Currency --</option>
+            <option>HRK</option>
+            <option>EUR</option>
+        </select>
+        <div class="alert alert-danger" *ngIf="currency.touched && !currency.valid">Please select currency!</div>
+    </div>
+    <div class="form-group">
+        <label for="date">Date</label>
+        <input type="date" id="date" class="form-control" [(ngModel)]="transaction.date" name="date" required #date="ngModel" />
+        <div class="alert alert-danger" *ngIf="date.touched && !date.valid">Please provide the date!</div>
+    </div>
+    <button class="btn btn-primary" [disabled]="!form.valid">Save</button>
+    <button class="btn btn-danger" type="button" *ngIf="transaction.id" (click)="delete()">Delete</button>
+</form>

@@ -13,6 +13,7 @@ import { TransactionCategoryFormComponent } from './components/transaction-categ
 import { TransactionTypeService } from './services/transaction-type.service';
 import { TransactionCategoryService } from './services/transaction-category.service';
 import { TransactionCategoryListComponent } from './components/transaction-category-list/transaction-category-list.component';
+import { TransactionFormComponent } from './components/transaction-form/transaction-form.component';
 
 @NgModule({
     declarations: [
@@ -22,7 +23,8 @@ import { TransactionCategoryListComponent } from './components/transaction-categ
         FetchDataComponent,
         HomeComponent,
         TransactionCategoryFormComponent,
-        TransactionCategoryListComponent
+        TransactionCategoryListComponent,
+        TransactionFormComponent
     ],
     imports: [
         CommonModule,
@@ -31,6 +33,7 @@ import { TransactionCategoryListComponent } from './components/transaction-categ
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
+            { path: 'transaction/new', component: TransactionFormComponent },
             { path: 'transactionCategories', component: TransactionCategoryListComponent },
             { path: 'transactionCategory/new', component: TransactionCategoryFormComponent },
             { path: 'transactionCategory/:id', component: TransactionCategoryFormComponent },

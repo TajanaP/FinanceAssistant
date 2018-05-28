@@ -17,6 +17,11 @@ export class TransactionCategoryService {
             .map(response => response.json());
     }
 
+    getCategoriesForType(id: number) {
+        return this.http.get("/api/transactionCategory/getCategoriesForType/" + id)
+            .map(response => response.json());
+    }
+
     createCategory(category: any) {
         return this.http.post("/api/transactionCategory", category)
             .map(response => response.json());
