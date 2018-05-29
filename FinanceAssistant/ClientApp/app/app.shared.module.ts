@@ -14,6 +14,7 @@ import { TransactionTypeService } from './services/transaction-type.service';
 import { TransactionCategoryService } from './services/transaction-category.service';
 import { TransactionCategoryListComponent } from './components/transaction-category-list/transaction-category-list.component';
 import { TransactionFormComponent } from './components/transaction-form/transaction-form.component';
+import { TransactionService } from './services/transaction.service';
 
 @NgModule({
     declarations: [
@@ -34,6 +35,7 @@ import { TransactionFormComponent } from './components/transaction-form/transact
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
             { path: 'transaction/new', component: TransactionFormComponent },
+            { path: 'transaction/:id', component: TransactionFormComponent },
             { path: 'transactionCategories', component: TransactionCategoryListComponent },
             { path: 'transactionCategory/new', component: TransactionCategoryFormComponent },
             { path: 'transactionCategory/:id', component: TransactionCategoryFormComponent },
@@ -42,7 +44,8 @@ import { TransactionFormComponent } from './components/transaction-form/transact
     ],
     providers: [
         TransactionTypeService,
-        TransactionCategoryService
+        TransactionCategoryService,
+        TransactionService
     ]
 })
 export class AppModuleShared {

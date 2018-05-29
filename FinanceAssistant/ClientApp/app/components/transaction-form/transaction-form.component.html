@@ -3,7 +3,7 @@
 <form (ngSubmit)="submit()" #form="ngForm">
     <div class="form-group">
         <label for="type">Type</label>
-        <select id="type" class="form-control" (change)="onTypeChange()" [(ngModel)]="transaction.typeId" name="categoryTypeId" required #typeId="ngModel">
+        <select id="type" class="form-control" (change)="populateCategories()" [(ngModel)]="transaction.typeId" name="categoryTypeId" required #typeId="ngModel">
             <option value="" disabled>-- Select Transaction Type --</option>
             <option *ngFor="let type of transactionTypes" value="{{ type.id }}">{{ type.name }}</option>
         </select>

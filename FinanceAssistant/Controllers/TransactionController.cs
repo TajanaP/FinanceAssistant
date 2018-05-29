@@ -88,7 +88,7 @@ namespace FinanceAssistant.Controllers
             transactionRepository.DeleteFromDatabase(transactionInDb);
             transactionRepository.Save();
 
-            return Ok();
+            return Ok(id);
         }
     }
 }
