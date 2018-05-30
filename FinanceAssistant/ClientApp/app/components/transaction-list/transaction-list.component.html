@@ -1,0 +1,51 @@
+<h2>Transactions</h2>
+<p>
+    <a [routerLink]="['/transaction/new']" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i></a>
+</p>
+
+<div class="well">
+    <div class="form-group">
+        <label for="type">Type</label>
+        <select id="type" class="form-control" [(ngModel)]="filter.typeId" (change)="onFilterChange()">
+            <option value="" disabled>-- Select Transaction Type --</option>
+            <option *ngFor="let type of types" value="{{ type.id }}">{{ type.name }}</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="category">Category</label>
+        <select id="category" class="form-control" [(ngModel)]="filter.categoryId" (change)="onFilterChange()">
+            <option value="" disabled>-- Select Transaction Category --</option>
+            <option *ngFor="let category of categories" value="{{ category.id }}">{{ category.name }}</option>
+        </select>
+    </div>
+    <button class="btn btn-primary" (click)="resetFilter()">Reset</button>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Type</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Amount</th>
+            <th>Currency</th>
+            <th>Date</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let transaction of transactions">
+            <td>{{ transaction.id }}</td>
+            <td>{{ transaction.type.name }}</td>
+            <td>{{ transaction.category.name }}</td>
+            <td>{{ transaction.description }}</td>
+            <td>{{ transaction.amount }}</td>
+            <td>{{ transaction.currency }}</td>
+            <td>{{ transaction.date }}</td>
+            <td>
+                <a [routerLink]="['/transaction/', transaction.id]" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i></a>
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -12,12 +12,14 @@ namespace FinanceAssistant.Controllers
     {
         private readonly ITransactionRepository transactionRepository;
         private readonly ITransactionCategoryRepository categoryRepository;
+        private readonly ITransactionTypeRepository typeRepository;
         private readonly IMapper mapper;
 
-        public TransactionController(ITransactionRepository transactionRepository, ITransactionCategoryRepository categoryRepository, IMapper mapper)
+        public TransactionController(ITransactionRepository transactionRepository, ITransactionCategoryRepository categoryRepository, ITransactionTypeRepository typeRepository, IMapper mapper)
         {
             this.transactionRepository = transactionRepository;
             this.categoryRepository = categoryRepository;
+            this.typeRepository = typeRepository;
             this.mapper = mapper;
         }
 
@@ -41,6 +43,11 @@ namespace FinanceAssistant.Controllers
         public IEnumerable<TransactionViewModel> GetTransactions()
         {
             var transactions = transactionRepository.GetAllFromDatabaseEnumerable();
+            foreach (var transaction in transactions)
+            {
+                transaction.Type = typeRepository.FindById(transaction.TypeId);
+                transaction.Category = categoryRepository.FindById(transaction.CategoryId);
+            }
 
             return mapper.Map<IEnumerable<Transaction>, IEnumerable<TransactionViewModel>>(transactions);
         }
