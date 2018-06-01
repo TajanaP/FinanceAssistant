@@ -12,13 +12,8 @@ export class TransactionCategoryService {
             .map(response => response.json());
     }
 
-    getCategories() {
-        return this.http.get("/api/transactionCategory")
-            .map(response => response.json());
-    }
-
-    getCategoriesForType(id: number) {
-        return this.http.get("/api/transactionCategory/getCategoriesForType/" + id)
+    getCategories(id?: number) {
+        return this.http.get("/api/transactionCategory/all/" + id)
             .map(response => response.json());
     }
 

@@ -38,7 +38,7 @@ export class TransactionListComponent implements OnInit {
         if (this.filter.typeId) {
             transactions = transactions.filter(t => t.category.type.id == this.filter.typeId);
             var selectedType = this.types.find(t => t.id == this.filter.typeId);
-            this.categoryService.getCategoriesForType(selectedType.id).subscribe(categories =>
+            this.categoryService.getCategories(selectedType.id).subscribe(categories =>
                 this.categories = categories);
         }
 

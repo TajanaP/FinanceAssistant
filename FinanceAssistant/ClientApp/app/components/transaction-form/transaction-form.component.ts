@@ -58,7 +58,7 @@ export class TransactionFormComponent implements OnInit {
     populateCategories() {
         var selectedType = this.transactionTypes.find(t => t.id == this.transaction.typeId);
 
-        this.transactionCategoryService.getCategoriesForType(selectedType.id).subscribe(categories =>
+        this.transactionCategoryService.getCategories(selectedType.id).subscribe(categories =>
             this.transactionCategories = categories);
     }
 

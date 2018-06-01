@@ -42,20 +42,16 @@ namespace FinanceAssistant.Controllers
             return Ok(categoryViewModel);
         }
 
-        [HttpGet]
-        public IEnumerable<TransactionCategoryViewModel> GetCategories()
+        [HttpGet("all/{id?}")]
+        public IEnumerable<TransactionCategoryViewModel> GetCategories(int? id)
         {
-            var categoriesInDb = categoryRepository.GetAllFromDatabaseEnumerable().ToList();
-            foreach (var category in categoriesInDb)
-                category.Type = typeRepository.FindById(category.TypeId);
+            IEnumerable<TransactionCategory> categoriesInDb;
 
-            return mapper.Map<IEnumerable<TransactionCategory>, IEnumerable<TransactionCategoryViewModel>>(categoriesInDb);
-        }
+            if (id != null)
+                categoriesInDb = categoryRepository.GetAllFromDatabaseEnumerable().Where(c => c.TypeId == id).ToList();
+            else
+                categoriesInDb = categoryRepository.GetAllFromDatabaseEnumerable().ToList();
 
-        [HttpGet("getCategoriesForType/{id}")]
-        public IEnumerable<TransactionCategoryViewModel> GetCategoriesforType(int id)
-        {
-            var categoriesInDb = categoryRepository.GetAllFromDatabaseEnumerable().Where(c => c.TypeId == id).ToList();
             foreach (var category in categoriesInDb)
                 category.Type = typeRepository.FindById(category.TypeId);
 
