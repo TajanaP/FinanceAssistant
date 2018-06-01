@@ -14,11 +14,14 @@ namespace FinanceAssistant.Mapping
         {
             // Domain To ViewModel
             CreateMap<Transaction, TransactionViewModel>();
+            CreateMap<Transaction, SaveTransactionViewModel>();
             CreateMap<TransactionType, TransactionTypeViewModel>();
             CreateMap<TransactionCategory, TransactionCategoryViewModel>();
+            CreateMap<TransactionCategory, SaveTransactionCategoryViewModel>();
 
             // ViewModel To Domain
-            CreateMap<TransactionCategoryViewModel, TransactionCategory>();
+            CreateMap<SaveTransactionCategoryViewModel, TransactionCategory>();
+            CreateMap<SaveTransactionViewModel, Transaction>();
         }
     }
 }

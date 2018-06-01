@@ -19,27 +19,29 @@ export class TransactionCategoryFormComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router) {
 
-        route.params.subscribe(params =>
-            this.transactionCategory.id = +params['id']); // '+' converts 'id' to a number
+        route.params.subscribe(params => {
+            this.transactionCategory.id = +params['id'] || 0  // '+' converts 'id' to a number, '0' if 'id' is not defined (new category)
+        });
     }
 
     ngOnInit() {
         this.transactionTypeService.getCategoryTypes().subscribe(types =>
             this.transactionTypes = types);
 
-        this.transactionCategoryService.getCategory(this.transactionCategory.id).subscribe(category =>
-            this.transactionCategory = category);
+        if (this.transactionCategory.id)
+            this.transactionCategoryService.getCategory(this.transactionCategory.id).subscribe(category =>
+                this.transactionCategory = category);
     }
 
     submit() {
         if (this.transactionCategory.id) {
+            this.transactionCategory.typeId = this.transactionCategory.type.id;
             this.transactionCategoryService.updateCategory(this.transactionCategory)
                 .subscribe(result => console.log(result));
-        } else {
-            this.transactionCategory.id = 0; // EF will create 'id'
+        }
+        else
             this.transactionCategoryService.createCategory(this.transactionCategory)
                 .subscribe(result => console.log(result));
-        }
     }
 
     delete() {

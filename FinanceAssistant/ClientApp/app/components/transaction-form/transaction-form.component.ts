@@ -5,6 +5,7 @@ import { TransactionService } from '../../services/transaction.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/Observable/forkJoin';
+import { SaveTransaction, Transaction } from '../../models/transaction';
 
 @Component({
   selector: 'app-transaction-form',
@@ -13,9 +14,17 @@ import 'rxjs/add/Observable/forkJoin';
 })
 export class TransactionFormComponent implements OnInit {
 
-    transaction: any = {}
     transactionTypes: any[];
     transactionCategories: any[];
+    transaction: SaveTransaction = {
+        id: 0,
+        typeId: 0,
+        categoryId: 0,
+        description: '',
+        amount: 0,
+        currency: '',
+        date: new Date
+    };
 
     constructor(
         private transactionTypeService: TransactionTypeService,
@@ -24,8 +33,9 @@ export class TransactionFormComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router) {
 
-        route.params.subscribe(params =>
-            this.transaction.id = +params['id']); // '+' converts 'id' to a number
+        route.params.subscribe(params => {
+            this.transaction.id = +params['id'] || 0 // '+' converts 'id' to a number, '0' if 'id' is not defined (new transaction)
+        });
     }
 
     ngOnInit() {
@@ -52,10 +62,10 @@ export class TransactionFormComponent implements OnInit {
             this.transactionCategories = categories);
     }
 
-    setTranasction(transaction: any) {
+    setTranasction(transaction: Transaction) {
         this.transaction.id = transaction.id;
-        this.transaction.typeId = transaction.typeId;
-        this.transaction.categoryId = transaction.categoryId;
+        this.transaction.typeId = transaction.category.type.id
+        this.transaction.categoryId = transaction.category.id;
         this.transaction.description = transaction.description;
         this.transaction.amount = transaction.amount;
         this.transaction.currency = transaction.currency;
@@ -63,15 +73,12 @@ export class TransactionFormComponent implements OnInit {
     }
 
     submit() {
-        if (this.transaction.id) {
+        if (this.transaction.id)
             this.transactionService.updateTransaction(this.transaction)
                 .subscribe(result => console.log(result));
-        }
-        else {
-            this.transaction.id = 0; // EF will create 'id'
+        else
             this.transactionService.createTransaction(this.transaction)
                 .subscribe(result => console.log(result));
-        }
     }
 
     delete() {

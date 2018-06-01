@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
+import { SaveTransaction } from '../models/transaction';
 
 @Injectable()
 export class TransactionService {
@@ -22,7 +23,7 @@ export class TransactionService {
             .map(response => response.json());
     }
 
-    updateTransaction(transaction: any) {
+    updateTransaction(transaction: SaveTransaction) {
         return this.http.put("/api/transaction/" + transaction.id, transaction)
             .map(response => response.json());
     }

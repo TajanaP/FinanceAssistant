@@ -35,7 +35,9 @@ namespace FinanceAssistant.Controllers
             if (transactionInDb == null)
                 return NotFound();
 
+            SetTransactionTypeAndCategory(transactionInDb);
             var transactionViewModel = mapper.Map<Transaction, TransactionViewModel>(transactionInDb);
+
             return Ok(transactionViewModel);
         }
 
@@ -44,31 +46,29 @@ namespace FinanceAssistant.Controllers
         {
             var transactions = transactionRepository.GetAllFromDatabaseEnumerable();
             foreach (var transaction in transactions)
-            {
-                transaction.Type = typeRepository.FindById(transaction.TypeId);
-                transaction.Category = categoryRepository.FindById(transaction.CategoryId);
-            }
+                SetTransactionTypeAndCategory(transaction);
 
             return mapper.Map<IEnumerable<Transaction>, IEnumerable<TransactionViewModel>>(transactions);
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody]TransactionViewModel transactionViewModel)
+        public IActionResult Create([FromBody]SaveTransactionViewModel transactionViewModel)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var transaction = mapper.Map<TransactionViewModel, Transaction>(transactionViewModel);
+            var transaction = mapper.Map<SaveTransactionViewModel, Transaction>(transactionViewModel);
             transactionRepository.AddToDatabase(transaction);
             transactionRepository.Save();
 
+            SetTransactionTypeAndCategory(transaction);
             var result = mapper.Map<Transaction, TransactionViewModel>(transaction);
 
             return Ok(result);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody]TransactionViewModel transactionViewModel)
+        public IActionResult Update(int id, [FromBody]SaveTransactionViewModel transactionViewModel)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -80,6 +80,7 @@ namespace FinanceAssistant.Controllers
             mapper.Map(transactionViewModel, transactionInDb);
             transactionRepository.Save();
 
+            SetTransactionTypeAndCategory(transactionInDb);
             var result = mapper.Map<Transaction, TransactionViewModel>(transactionInDb);
 
             return Ok(result);
@@ -96,6 +97,12 @@ namespace FinanceAssistant.Controllers
             transactionRepository.Save();
 
             return Ok(id);
+        }
+
+        public void SetTransactionTypeAndCategory(Transaction transaction)
+        {
+            transaction.Category = categoryRepository.FindById(transaction.CategoryId);
+            transaction.Category.Type = typeRepository.FindById(transaction.TypeId);
         }
     }
 }

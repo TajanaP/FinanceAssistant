@@ -36,7 +36,9 @@ namespace FinanceAssistant.Controllers
             if (categoryInDb == null)
                 return NotFound();
 
+            categoryInDb.Type = typeRepository.FindById(categoryInDb.TypeId);
             var categoryViewModel = mapper.Map<TransactionCategory, TransactionCategoryViewModel>(categoryInDb);
+
             return Ok(categoryViewModel);
         }
 
@@ -54,26 +56,30 @@ namespace FinanceAssistant.Controllers
         public IEnumerable<TransactionCategoryViewModel> GetCategoriesforType(int id)
         {
             var categoriesInDb = categoryRepository.GetAllFromDatabaseEnumerable().Where(c => c.TypeId == id).ToList();
+            foreach (var category in categoriesInDb)
+                category.Type = typeRepository.FindById(category.TypeId);
+
             return mapper.Map<IEnumerable<TransactionCategory>, IEnumerable<TransactionCategoryViewModel>>(categoriesInDb);
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody]TransactionCategoryViewModel categoryViewModel)
+        public IActionResult Create([FromBody]SaveTransactionCategoryViewModel categoryViewModel)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var category = mapper.Map<TransactionCategoryViewModel, TransactionCategory>(categoryViewModel);
+            var category = mapper.Map<SaveTransactionCategoryViewModel, TransactionCategory>(categoryViewModel);
             categoryRepository.AddToDatabase(category);
             categoryRepository.Save();
 
+            category.Type = typeRepository.FindById(categoryViewModel.TypeId);
             var result = mapper.Map<TransactionCategory, TransactionCategoryViewModel>(category);
 
             return Ok(result);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody]TransactionCategoryViewModel categoryViewModel)
+        public IActionResult Update(int id, [FromBody]SaveTransactionCategoryViewModel categoryViewModel)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -85,7 +91,9 @@ namespace FinanceAssistant.Controllers
             mapper.Map(categoryViewModel, categoryInDb);
             categoryRepository.Save();
 
+            categoryInDb.Type = typeRepository.FindById(categoryViewModel.TypeId);
             var result = mapper.Map<TransactionCategory, TransactionCategoryViewModel>(categoryInDb);
+
             return Ok(result);
         }
 
