@@ -3,12 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
+import { ChartModule } from 'angular-highcharts';
 
 import { AppComponent } from './components/app/app.component';
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { HomeComponent } from './components/home/home.component';
-import { FetchDataComponent } from './components/fetchdata/fetchdata.component';
-import { CounterComponent } from './components/counter/counter.component';
 import { TransactionCategoryFormComponent } from './components/transaction-category-form/transaction-category-form.component';
 import { TransactionTypeService } from './services/transaction-type.service';
 import { TransactionCategoryService } from './services/transaction-category.service';
@@ -21,8 +20,6 @@ import { TransactionListComponent } from './components/transaction-list/transact
     declarations: [
         AppComponent,
         NavMenuComponent,
-        CounterComponent,
-        FetchDataComponent,
         HomeComponent,
         TransactionCategoryFormComponent,
         TransactionCategoryListComponent,
@@ -33,6 +30,7 @@ import { TransactionListComponent } from './components/transaction-list/transact
         CommonModule,
         HttpModule,
         FormsModule,
+        ChartModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },

@@ -13,5 +13,7 @@ namespace FinanceAssistant.Controllers.ViewModels
         public TransactionTypeViewModel Type { get; set; }
 
         public string Name { get; set; }
+
+        public decimal ChartAmount { get; set; }
     }
 }
