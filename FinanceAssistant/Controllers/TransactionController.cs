@@ -44,16 +44,10 @@ namespace FinanceAssistant.Controllers
             return Ok(transactionViewModel);
         }
     
-        [HttpGet("all/{startDate?}/{endDate?}")]
-        public IEnumerable<TransactionViewModel> GetTransactions(DateTime? startDate, DateTime? endDate)
+        [HttpGet("all")]
+        public IEnumerable<TransactionViewModel> GetTransactions()
         {
-            var transactions = new List<Transaction>();
-
-            if (startDate != null && endDate != null)
-                transactions = transactionRepository.GetAllFromDatabaseEnumerable().Where(t => t.Date >= startDate && t.Date <= endDate).ToList();
-            else
-                transactions = transactionRepository.GetAllFromDatabaseEnumerable().ToList();
-
+            var transactions = transactionRepository.GetAllFromDatabaseEnumerable().ToList();
             foreach (var transaction in transactions)
                 SetTransactionTypeAndCategory(transaction);
 
@@ -108,102 +102,10 @@ namespace FinanceAssistant.Controllers
             return Ok(id);
         }
 
-        // Helper Methods
-
         public void SetTransactionTypeAndCategory(Transaction transaction)
         {
             transaction.Category = categoryRepository.FindById(transaction.CategoryId);
             transaction.Category.Type = typeRepository.FindById(transaction.TypeId);
-        }
-
-        [HttpGet("exchangeRate/{date}/{currency}/{amount}")]
-        public decimal CalculateExchangeRate(DateTime date, string currency, decimal amount)
-        {
-            var exchangeRateList = new ExchangeRate(date.ToString("yyyy-MM-dd"));
-      
-            if (currency != "EUR")
-            {
-                ExchangeRate.item exchangeRateEUR = exchangeRateList.getExchangeRate("EUR");
-                var rateEUR = decimal.Parse(exchangeRateEUR.jedinica) * decimal.Parse(exchangeRateEUR.srednji_tecaj);
-                return amount / rateEUR;
-            }
-            return amount;
-        }
-
-        [HttpGet("sum")]
-        public decimal CalculateSum()
-        {
-            decimal sum = 0;
-            var transactions = GetTransactions(null, null);
-            foreach (var transaction in transactions)
-            {
-                var amount = CalculateExchangeRate(transaction.Date, transaction.Currency, transaction.Amount);
-                if (transaction.Category.Type.Id == 1)
-                    sum = sum - amount;
-                else
-                    sum = sum + amount;
-            }
-            return decimal.Round(sum, 2);
-        }
-
-        // Charts
-
-        [HttpGet("chartDataByCategory/{id?}/{startDate?}/{endDate?}")]
-        public ChartViewModel GetChartDataByCategory(int? id = null, DateTime? startDate = null, DateTime? endDate = null)
-        {
-            var categoriesInDb = new List<TransactionCategory>();
-            var sortedCategories = new List<TransactionCategoryViewModel>();
-            var chartData = new ChartViewModel();
-
-            if (id != null)
-                categoriesInDb = categoryRepository.GetAllFromDatabaseEnumerable().Where(c => c.TypeId == id).ToList();
-            else
-                categoriesInDb = categoryRepository.GetAllFromDatabaseEnumerable().ToList();
-
-            var categories = mapper.Map<List<TransactionCategory>, List<TransactionCategoryViewModel>>(categoriesInDb);
-            foreach (var category in categories)
-            {
-                var transactions = GetTransactions(startDate, endDate).Where(t => t.Category.Id == category.Id);
-                foreach (var transaction in transactions)
-                {
-                    var amount = CalculateExchangeRate(transaction.Date, transaction.Currency, transaction.Amount);
-                    category.ChartAmount += amount;
-                    category.Type = transaction.Category.Type;
-                }
-
-                if (category.ChartAmount != 0 && id == null) // without ID --> income + expense
-                    sortedCategories.Add(category);
-                else if (category.ChartAmount != 0 && category.Type.Id == id) // with ID --> income OR expense
-                    sortedCategories.Add(category);
-            }
-
-            foreach (var category in sortedCategories)
-            {
-                chartData.ChartLabels.Add(category.Name);
-                chartData.ChartAmounts.Add(category.ChartAmount);
-            }
-            return chartData;
-        }
-
-        [HttpGet("chartDataByType/{startDate?}/{endDate?}")]
-        public ChartViewModel GetChartDataByType(DateTime? startDate = null, DateTime? endDate = null)
-        {
-            var chartData = new ChartViewModel();
-            decimal amount = 0;
-
-            var typesInDb = typeRepository.GetAllFromDatabaseEnumerable().ToList();
-            var types = mapper.Map<List<TransactionType>, List<TransactionTypeViewModel>>(typesInDb);
-            foreach (var type in types)
-            {
-                var transactions = GetTransactions(startDate, endDate).Where(t => t.Category.Type.Id == type.Id);
-                foreach (var transaction in transactions)
-                    amount += CalculateExchangeRate(transaction.Date, transaction.Currency, transaction.Amount);
-
-                chartData.ChartLabels.Add(type.Name);
-                chartData.ChartAmounts.Add(amount);
-                amount = 0;
-            }
-            return chartData;
         }
     }
 }

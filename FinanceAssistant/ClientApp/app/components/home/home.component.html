@@ -3,27 +3,71 @@
 <h3>Your transactions overview:</h3>
 <br />
 
+<!--DATE PICKERS-->
 <div class="form-group form-inline col-md-12">
     <div class="col-md-3">
         <label for="from">From</label>
-        <input id="from" type="date" class="form-control" [(ngModel)]="startDate" name="startDate" required />
+        <input id="from" type="date" class="form-control" [(ngModel)]="startDate" name="startDate" [max]="endDate" required />
     </div>
     <div class="col-md-3">
         <label for="to">To</label>
-        <input id="to" type="date" class="form-control" [(ngModel)]="endDate" name="endDate" [disabled]="!startDate" required />
+        <input id="to" type="date" class="form-control" [(ngModel)]="endDate" name="endDate" [min]="startDate" [disabled]="!startDate" required />
     </div>
-    <button type="button" class="btn btn-primary" (click)="getDataForDates()" [disabled]="!endDate">Show Data</button>
+    <button type="button" class="btn btn-primary" (click)="displayHomePageData()" [disabled]="!endDate">Show Data</button>
 </div>
 
-<div class="charts col-md-12">
-    <div class="col-md-4" [chart]="expenseChart"></div>
-    <div class="col-md-4" [chart]="incomeChart"></div>
-    <div class="col-md-4" [chart]="totalChart"></div>
+<!--CHARTS-->
+<div class="form-group form-inline charts col-md-12">
+    <div class="col-md-4 chart-holder">
+        <div class="card border-secondary mb-3" style="max-width: 40rem;">
+            <div class="card-header">
+                Expense
+            </div>
+            <div class="card-body">
+                <div [chart]="expenseChart"></div>
+            </div>
+            <div class="card-footer">
+                {{ currency }} <input id="sum" type="text" class="form-control balance-input-display" disabled [(ngModel)]="sum" name="sum" />
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 chart-holder">
+        <div class="card border-secondary mb-3" style="max-width: 40rem;">
+            <div class="card-header">
+                Income
+            </div>
+            <div class="card-body">
+                <div [chart]="incomeChart"></div>
+            </div>
+            <div class="card-footer">
+                {{ currency }} <input id="sum" type="text" class="form-control balance-input-display" disabled [(ngModel)]="sum" name="sum" />
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 chart-holder">
+        <div class="card border-secondary mb-3" style="max-width: 40rem;">
+            <div class="card-header">
+                Balance
+            </div>
+            <div class="card-body">
+                <div [chart]="balanceChart"></div>
+            </div>
+            <div class="card-footer">
+                {{ currency }} <input id="sum" type="text" class="form-control balance-input-display" disabled [(ngModel)]="sum" name="sum" />
+            </div>
+        </div>
+    </div>
 </div>
 
+<!--CURRENCY PICKER-->
 <div class="form-group form-inline col-md-12">
-    <div class="col-md-6">
-        <label for="sum">Current Balance</label>
-        <input id="sum" type="text" class="form-control" disabled [(ngModel)]="sum" name="sum" /><span> EUR</span>
+    <hr />
+    <div class="curreny-picker">
+        <label for="EUR">
+            <input type="radio" name="currency" id="EUR" [(ngModel)]="currency" value="EUR" (change)="displayHomePageData()"> EUR
+        </label>
+        <label for="HRK">
+            <input type="radio" name="currency" id="HRK" [(ngModel)]="currency" value="HRK" (change)="displayHomePageData()"> HRK
+        </label>
     </div>
 </div>

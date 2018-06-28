@@ -37,11 +37,11 @@ export class TransactionCategoryFormComponent implements OnInit {
         if (this.transactionCategory.id) {
             this.transactionCategory.typeId = this.transactionCategory.type.id;
             this.transactionCategoryService.updateCategory(this.transactionCategory)
-                .subscribe(result => console.log(result));
+                .subscribe(result => this.router.navigate(['/transactionCategories']));
         }
         else
             this.transactionCategoryService.createCategory(this.transactionCategory)
-                .subscribe(result => console.log(result));
+                .subscribe(result => this.router.navigate(['/transactionCategories']));
     }
 
     delete() {

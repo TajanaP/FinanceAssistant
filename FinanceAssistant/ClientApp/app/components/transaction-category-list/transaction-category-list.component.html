@@ -1,36 +1,49 @@
 <h2>Categories</h2>
+<hr />
 <p>
-    <a [routerLink]="['/transactionCategory/new']" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i></a>
+    <a [routerLink]="['/transactionCategory/new']" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i></a>
 </p>
 
-<div class="well">
-    <div class="form-group">
-        <label for="type">Type</label>
-        <select id="type" class="form-control" [(ngModel)]="filter.typeId" (change)="onFilterChange()">
-            <option value="" disabled>-- Select Transaction Type --</option>
-            <option *ngFor="let type of types" value="{{ type.id }}">{{ type.name }}</option>
-        </select>
+<div class="well col-md-12">
+    <div class="form-group form-inline">
+        <div class="form-group col-md-4">
+            <label for="type">Type</label>
+            <select id="type" class="form-control" [(ngModel)]="filter.typeId" (change)="onFilterChange()">
+                <option value="" disabled>-- Select Transaction Type --</option>
+                <option *ngFor="let type of types" value="{{ type.id }}">{{ type.name }}</option>
+            </select>
+        </div>
+        <div class="col-md-8">
+            <button class="btn btn-default pull-right" (click)="resetFilter()">Reset</button>
+        </div>
     </div>
-    <button class="btn btn-primary" (click)="resetFilter()">Reset</button>
 </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Type</th>
-            <th>Name</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let category of categories">
-            <td>{{ category.id }}</td>
-            <td>{{ category.type.name }}</td>
-            <td>{{ category.name }}</td>
-            <td>
-                <a [routerLink]="['/transactionCategory/', category.id]" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i></a>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<div class="container col-md-12">
+    <div class="row">
+        <div class="panel panel-default panel-table">
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Type</th>
+                            <th>Name</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let category of categories">
+                            <td>{{ category.id }}</td>
+                            <td>{{ category.type.name }}</td>
+                            <td>{{ category.name }}</td>
+                            <td>
+                                <a [routerLink]="['/transactionCategory/', category.id]" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

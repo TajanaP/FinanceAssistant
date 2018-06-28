@@ -75,10 +75,10 @@ export class TransactionFormComponent implements OnInit {
     submit() {
         if (this.transaction.id)
             this.transactionService.updateTransaction(this.transaction)
-                .subscribe(result => console.log(result));
+                .subscribe(result => this.router.navigate(['/transactions']));
         else
             this.transactionService.createTransaction(this.transaction)
-                .subscribe(result => console.log(result));
+                .subscribe(result => this.router.navigate(['/transactions']));
     }
 
     delete() {

@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { TransactionService } from '../../services/transaction.service';
+import { Component } from '@angular/core';
+import { HomeService } from '../../services/home.service';
 import { Chart } from 'angular-highcharts';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/zip';
@@ -9,13 +9,16 @@ import 'rxjs/add/observable/zip';
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent {
     sum: any;
     startDate: any;
     endDate: any;
-    totalChart: any;
-    totalLabelList: any[];
-    totalAmountList: any[];
+    currency: any;
+    typeExpense: number = 1;
+    typeIncome: number = 2;
+    balanceChart: any;
+    balanceLabelList: any[];
+    balanceAmountList: any[];
     expenseChart: any;
     expenseLabelList: any[];
     expenseAmountList: any[];
@@ -23,42 +26,31 @@ export class HomeComponent implements OnInit {
     incomeLabelList: any[];
     incomeAmountList: any[];
 
-    constructor(private transactionService: TransactionService) {
-        Observable.zip(
-            this.transactionService.getChartDataByCategory(1),
-            this.transactionService.getChartDataByCategory(2),
-            this.transactionService.getChartDataByType(this.startDate, this.endDate))
-                .subscribe(([expenseData, incomeData, totalData]) => {
-                    this.expenseLabelList = expenseData.chartLabels;
-                    this.expenseAmountList = expenseData.chartAmounts;
-                    this.incomeLabelList = incomeData.chartLabels;
-                    this.incomeAmountList = incomeData.chartAmounts;
-                    this.totalLabelList = totalData.chartLabels;
-                    this.totalAmountList = totalData.chartAmounts;
-                    this.createCharts();
-                });
+    constructor(private homeService: HomeService) {
+        this.currency = "EUR";
+        this.displayHomePageData();
     }
 
-    ngOnInit() {
-        this.transactionService.calculateSum().subscribe(sum =>
-            this.sum = sum);
-    }
-
-    getDataForDates() {
+    displayHomePageData() {
         this.clearChartData();
         Observable.zip(
-            this.transactionService.getChartDataByCategory(1, this.startDate, this.endDate),
-            this.transactionService.getChartDataByCategory(2, this.startDate, this.endDate),
-            this.transactionService.getChartDataByType(this.startDate, this.endDate))
-                .subscribe(([expenseData, incomeData, totalData]) => {
-                    this.expenseLabelList = expenseData.chartLabels;
-                    this.expenseAmountList = expenseData.chartAmounts;
-                    this.incomeLabelList = incomeData.chartLabels;
-                    this.incomeAmountList = incomeData.chartAmounts;
-                    this.totalLabelList = totalData.chartLabels;
-                    this.totalAmountList = totalData.chartAmounts;
-                    this.createCharts();
-                });
+            this.homeService.getChartDataByCategory(this.currency, this.typeExpense, this.startDate, this.endDate),
+            this.homeService.getChartDataByCategory(this.currency, this.typeIncome, this.startDate, this.endDate),
+            this.homeService.getChartDataByType(this.currency, this.startDate, this.endDate))
+            .subscribe(([expenseData, incomeData, balanceData]) => {
+                this.expenseLabelList = expenseData.chartLabels;
+                this.expenseAmountList = expenseData.chartAmounts;
+                this.incomeLabelList = incomeData.chartLabels;
+                this.incomeAmountList = incomeData.chartAmounts;
+                this.balanceLabelList = balanceData.chartLabels;
+                this.balanceAmountList = balanceData.chartAmounts;
+                this.createCharts();
+            });
+
+        this.homeService.calculateSum(this.currency, this.startDate, this.endDate).subscribe(sum => {
+            this.sum = sum;
+            this.sum = this.sum.toFixed(2); // show trailing zeros
+        });
     }
 
     clearChartData() {
@@ -66,21 +58,21 @@ export class HomeComponent implements OnInit {
         this.expenseAmountList = [];
         this.incomeLabelList = [];
         this.incomeAmountList = [];
-        this.totalLabelList = [];
-        this.totalAmountList = [];
+        this.balanceLabelList = [];
+        this.balanceAmountList = [];
     }
 
     createCharts() {
-        this.totalChart = new Chart({
+        this.balanceChart = new Chart({
             chart: {
                 type: 'pie'
             },
             title: {
-                text: 'Total'
+                text: ''
             },
             tooltip: {
                 //pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-                pointFormat: 'Amount: <b>{point.y:.2f} EUR</b>'
+                pointFormat: 'Amount: <b>{point.y:.2f}</b>'
             },
             plotOptions: {
                 pie: {
@@ -95,13 +87,13 @@ export class HomeComponent implements OnInit {
             series: [{
                 name: 'Total',
                 data: [{
-                    name: this.totalLabelList[0],
-                    y: this.totalAmountList[0],
+                    name: this.balanceLabelList[0],
+                    y: this.balanceAmountList[0],
                     sliced: true,
                     color: 'rgba(250, 5, 5, 1)'
                 }, {
-                    name: this.totalLabelList[1],
-                    y: this.totalAmountList[1],
+                    name: this.balanceLabelList[1],
+                    y: this.balanceAmountList[1],
                     color: 'rgba(53, 133, 10, 1)'
                 }]
             }]
@@ -112,11 +104,11 @@ export class HomeComponent implements OnInit {
                 type: 'pie'
             },
             title: {
-                text: 'Expense'
+                text: ''
             },
             tooltip: {
                 //pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-                pointFormat: 'Amount: <b>{point.y:.2f} EUR</b>'
+                pointFormat: 'Amount: <b>{point.y:.2f}</b>'
             },
             plotOptions: {
                 pie: {
@@ -179,11 +171,11 @@ export class HomeComponent implements OnInit {
                 type: 'pie'
             },
             title: {
-                text: 'Income'
+                text: ''
             },
             tooltip: {
                 //pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-                pointFormat: 'Amount: <b>{point.y:.2f} EUR</b>'
+                pointFormat: 'Amount: <b>{point.y:.2f}</b>'
             },
             plotOptions: {
                 pie: {

@@ -13,8 +13,8 @@ export class TransactionService {
             .map(response => response.json());
     }
 
-    getTransactions(startDate?: Date, endDate?: Date) {
-        return this.http.get("/api/transaction/all/" + startDate + "/" + endDate)
+    getTransactions() {
+        return this.http.get("/api/transaction/all")
             .map(response => response.json());
     }
 
@@ -30,21 +30,6 @@ export class TransactionService {
 
     deleteTransaction(id: number) {
         return this.http.delete("/api/transaction/" + id)
-            .map(response => response.json());
-    }
-
-    calculateSum() {
-        return this.http.get("/api/transaction/sum")
-            .map(response => response.json());
-    }
-
-    getChartDataByCategory(id?: number, startDate?: Date, endDate?: Date) {
-        return this.http.get("/api/transaction/chartDataByCategory/" + id + "/" + startDate + "/" + endDate)
-            .map(response => response.json());
-    }
-
-    getChartDataByType(startDate?: Date, endDate?: Date) {
-        return this.http.get("/api/transaction/chartDataByType/" + startDate + "/" + endDate)
             .map(response => response.json());
     }
 }
